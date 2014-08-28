@@ -21,11 +21,11 @@ The final step is to update the cron job to point from **scheduled.php** to **sc
 
 For example, the *standard* cron job would look something like this:
 ```
-php /home/jjfast2/public_html/scheduled.php > /dev/null 2>&1
+php /home/username/public_html/scheduled.php > /dev/null 2>&1
 ```
 Instead, it should look more like this:
 ```
-php /home/jjfast2/public_html/scheduling/scheduled.php > /dev/null 2>&1
+php /home/username/public_html/scheduling/scheduled.php > /dev/null 2>&1
 ```
 
 ##Supported Services
