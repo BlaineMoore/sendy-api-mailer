@@ -45,7 +45,7 @@ function scheduling_critsend($campaign_id) {
             $to_send_num = $row['to_send'];
             $to_send = $to_send_num;
             $to_send_lists = $row['to_send_lists'];
-            $scheduling_critsend_max_emails_per_transmission = 5;
+            $scheduling_critsend_max_emails_per_transmission = 495;
 
             //get user details
             $q2 = 'SELECT s3_key, s3_secret, name, username, timezone FROM login WHERE id = '.$userID;
