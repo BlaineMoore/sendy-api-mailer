@@ -2,20 +2,21 @@
 /*
  * File: scheduling/critsend.php
  * Description: This file provides a method for sending using the Critsend API.
- * Version: 0.1
+ * Version: 0.2
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
  */
 include_once("critsend-connector.php");
-$mxm = new MxmConnect();
+$mxm = null;
 
 function scheduling_critsend($campaign_id) {
     global $mysqli;
     global $offset;
     global $the_offset;
     global $scheduling_start;
-
+	global $mxm;
+	
     //Check campaigns database
     $q = 'SELECT timezone, sent, id, app, userID, to_send, to_send_lists, recipients, timeout_check, send_date, lists, from_name, from_email, reply_to, title, plain_text, html_text FROM campaigns WHERE id = '.$campaign_id.' AND ((send_date !="" AND lists !="" AND timezone != "") OR (to_send > recipients)) ORDER BY sent DESC';
     $r = mysqli_query($mysqli, $q);
@@ -75,7 +76,9 @@ function scheduling_critsend($campaign_id) {
                     $smtp_password = $row['smtp_password'];
                 }
             }
-
+			
+			$mxm = new MxmConnect($smtp_username, $smtp_password);
+			
             //check if we should send email now
             if((($time>=$send_date && $time<$send_date+300) && $sent=='') || (($send_date<$time) && $sent=='') || ($send_date=='0' && $timezone=='0'))
             {
