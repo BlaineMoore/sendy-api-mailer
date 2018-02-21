@@ -2,7 +2,7 @@
 /*
  * File: scheduling/includes/scheduling-config.php
  * Description: This file includes other required files and provides an optional place for settings.
- * Version: 0.1
+ * Version: 0.1.1
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -56,4 +56,5 @@ include_once('db.php');
 include_once(SCHEDULING_RELATIVE_PATH_TO_ROOT . '/includes/helpers/class.phpmailer.php');
 include_once(SCHEDULING_RELATIVE_PATH_TO_ROOT . '/includes/helpers/short.php');
 include_once(SCHEDULING_RELATIVE_PATH_TO_ROOT . '/includes/helpers/locale.php');
+include_once(SCHEDULING_RELATIVE_PATH_TO_ROOT . '/includes/helpers/integrations/zapier/triggers/functions.php');?>
 ?>
