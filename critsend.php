@@ -2,7 +2,7 @@
 /*
  * File: scheduling/critsend.php
  * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.5
- * Version: 0.4
+ * Version: 0.4.1
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -59,7 +59,8 @@ function scheduling_critsend($campaign_id) {
 			$to_send_lists = $row['to_send_lists'];
 			$opens_tracking = $row['opens_tracking'];
 			$links_tracking = $row['links_tracking'];
-			
+            $scheduling_critsend_max_emails_per_transmission = 495; /*BM: Added*/
+            			
 			//Set language
 			$q_l = 'SELECT login.language FROM campaigns, login WHERE campaigns.id = '.$campaign_id.' AND login.app = campaigns.app';
 			$r_l = mysqli_query($mysqli, $q_l);
