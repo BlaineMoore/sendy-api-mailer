@@ -1,8 +1,8 @@
 <?php
 /*
  * File: scheduling/critsend.php
- * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.5
- * Version: 0.4.1
+ * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.6
+ * Version: 0.4.2
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -160,7 +160,7 @@ function scheduling_critsend($campaign_id) {
 						foreach($matches as $var)
 						{    
 							$var = $query_string!='' ? ((strpos($var,'?') !== false) ? $var.'&'.$query_string : $var.'?'.$query_string) : $var;
-							if(substr($var, 0, 1)!="#" && substr($var, 0, 6)!="mailto" && substr($var, 0, 3)!="ftp" && substr($var, 0, 3)!="tel" && substr($var, 0, 3)!="sms" && substr($var, 0, 13)!="[unsubscribe]" && substr($var, 0, 12)!="[webversion]" && !strpos($var, 'fonts.googleapis.com'))
+							if(substr($var, 0, 1)!="#" && substr($var, 0, 6)!="mailto" && substr($var, 0, 3)!="ftp" && substr($var, 0, 3)!="tel" && substr($var, 0, 3)!="sms" && substr($var, 0, 13)!="[unsubscribe]" && substr($var, 0, 12)!="[webversion]" && !strpos($var, 'fonts.googleapis.com') && !strpos($var, 'use.typekit.net'))
 							{
 								$var = str_replace($unconverted_date, $converted_date, $var);
 						    	array_push($links, $var);
@@ -535,7 +535,7 @@ BM:Removed */
 				    	$plain_treated = str_replace('[webversion]', APP_PATH.'/w/'.$scheduling_short_subscriber_id.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id), $plain_treated); /*BM:Updated Line*/
 				    	
 				    	//set unsubscribe links
-				    	$html_treated = str_replace('<unsubscribe', '<a href="'.APP_PATH.'/unsubscribe/'.$scheduling_short_email.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id).'" ', $html_treated);
+				    	$html_treated = str_replace('<unsubscribe', '<a href="'.APP_PATH.'/unsubscribe/'.$scheduling_short_email.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id).'" ', $html_treated); /*BM:Updated Line*/
 				    	$html_treated = str_replace('</unsubscribe>', '</a>', $html_treated);
 				    	$html_treated = str_replace('[unsubscribe]', APP_PATH.'/unsubscribe/'.$scheduling_short_email.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id), $html_treated); /*BM:Updated Line*/
 				    	$plain_treated = str_replace('[unsubscribe]', APP_PATH.'/unsubscribe/'.$scheduling_short_email.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id), $plain_treated); /*BM:Updated Line*/
@@ -551,7 +551,7 @@ BM:Removed */
 					    	//add tracking 1 by 1px image
 		                    $html_treated .= '<img src="'.APP_PATH.'/t/'.short($campaign_id).'/'.$scheduling_short_subscriber_id.'" alt=""  style="width:1px;height:1px;" />'; /*BM:Updated Line*/
 						}
-
+						
 						//Get server path
 						$server_path_array = explode('scheduled.php', $_SERVER['SCRIPT_FILENAME']);
 					    $server_path = $server_path_array[0];
