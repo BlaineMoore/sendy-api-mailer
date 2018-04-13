@@ -23,7 +23,7 @@ class MxmConnect {
 	 * Client configuration
 	 */
 	//Change this to ISO-8859-1  for encoding
-	private static $encoding = 'ISO-8859-1';
+	private static $encoding = 'UTF-8';
 	private static $user = '';
 	private static $key = '';
 	private static $wsdl = '/api_2.php?wsdl';
