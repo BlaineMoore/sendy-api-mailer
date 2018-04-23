@@ -1,8 +1,8 @@
 <?php
 /*
  * File: scheduling/critsend.php
- * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.6
- * Version: 0.4.2
+ * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.7
+ * Version: 0.4.3
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -98,7 +98,7 @@ function scheduling_critsend($campaign_id) {
 			$converted_date = array($currentdaynumber, $currentday, $currentmonthnumber, $currentmonth, $currentyear);
 			
 			//get smtp settings
-			$q3 = 'SELECT smtp_host, smtp_port, smtp_ssl, smtp_username, smtp_password, notify_campaign_sent FROM apps WHERE id = '.$app;
+			$q3 = 'SELECT smtp_host, smtp_port, smtp_ssl, smtp_username, smtp_password, notify_campaign_sent, gdpr_only FROM apps WHERE id = '.$app;
 			$r3 = mysqli_query($mysqli, $q3);
 			if ($r3 && mysqli_num_rows($r3) > 0)
 			{
@@ -110,6 +110,7 @@ function scheduling_critsend($campaign_id) {
 					$smtp_username = $row['smtp_username'];
 					$smtp_password = $row['smtp_password'];
 					$notify_campaign_sent = $row['notify_campaign_sent'];
+					$gdpr_line = $row['gdpr_only'] ? 'AND gdpr = 1 ' : '';
 			    }  
 			}
 			
@@ -138,7 +139,7 @@ function scheduling_critsend($campaign_id) {
 				else
 					$q = 'UPDATE campaigns SET sent = "'.$time.'", send_date=NULL, lists=NULL, timezone=NULL WHERE id = '.$campaign_id;
 				$r = mysqli_query($mysqli, $q);
-				if ($r){}	
+				if ($r){}
 				
 				//if sending for the first time
 				if($offset=='')
@@ -160,7 +161,7 @@ function scheduling_critsend($campaign_id) {
 						foreach($matches as $var)
 						{    
 							$var = $query_string!='' ? ((strpos($var,'?') !== false) ? $var.'&'.$query_string : $var.'?'.$query_string) : $var;
-							if(substr($var, 0, 1)!="#" && substr($var, 0, 6)!="mailto" && substr($var, 0, 3)!="ftp" && substr($var, 0, 3)!="tel" && substr($var, 0, 3)!="sms" && substr($var, 0, 13)!="[unsubscribe]" && substr($var, 0, 12)!="[webversion]" && !strpos($var, 'fonts.googleapis.com') && !strpos($var, 'use.typekit.net'))
+							if(substr($var, 0, 1)!="#" && substr($var, 0, 6)!="mailto" && substr($var, 0, 3)!="ftp" && substr($var, 0, 3)!="tel" && substr($var, 0, 3)!="sms" && substr($var, 0, 13)!="[unsubscribe]" && substr($var, 0, 12)!="[webversion]" && substr($var, 0, 11)!="[reconsent]" && !strpos($var, 'fonts.googleapis.com') && !strpos($var, 'use.typekit.net'))
 							{
 								$var = str_replace($unconverted_date, $converted_date, $var);
 						    	array_push($links, $var);
@@ -180,7 +181,7 @@ function scheduling_critsend($campaign_id) {
 					$q .= $segs==0 && $segs_excl==0 ? ' ' : ' LEFT JOIN subscribers_seg ON (subscribers.id = subscribers_seg.subscriber_id) ';
 					$q .= 'WHERE ('.$main_query.$seg_query.') ';
 					$q .= $exclude_query != '' || $exclude_seg_query != '' ? 'AND ('.$exclude_query.$exclude_seg_query.') ' : '';
-					$q .= 'AND subscribers.unsubscribed = 0 AND subscribers.bounced = 0 AND subscribers.complaint = 0 AND subscribers.confirmed = 1 
+					$q .= 'AND subscribers.unsubscribed = 0 AND subscribers.bounced = 0 AND subscribers.complaint = 0 AND subscribers.confirmed = 1 '.$gdpr_line.'
 						   GROUP BY subscribers.email 
 						   ORDER BY subscribers.id ASC 
 						   LIMIT 18446744073709551615'.$the_offset;
@@ -216,7 +217,7 @@ function scheduling_critsend($campaign_id) {
 				$q .= $segs==0 && $segs_excl==0 ? ' ' : ' LEFT JOIN subscribers_seg ON (subscribers.id = subscribers_seg.subscriber_id) ';
 				$q .= 'WHERE ('.$main_query.$seg_query.') ';
 				$q .= $exclude_query != '' || $exclude_seg_query != '' ? 'AND ('.$exclude_query.$exclude_seg_query.') ' : '';
-				$q .= 'AND subscribers.unsubscribed = 0 AND subscribers.bounced = 0 AND subscribers.complaint = 0 AND subscribers.confirmed = 1 
+				$q .= 'AND subscribers.unsubscribed = 0 AND subscribers.bounced = 0 AND subscribers.complaint = 0 AND subscribers.confirmed = 1 '.$gdpr_line.'
 					   GROUP BY subscribers.email 
 					   ORDER BY subscribers.id ASC 
 					   LIMIT 18446744073709551615'.$the_offset;
