@@ -2,7 +2,7 @@
 /*
  * File: scheduling/critsend.php
  * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.7
- * Version: 0.4.3
+ * Version: 0.4.4
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -545,6 +545,10 @@ BM:Removed */
 						$html_treated = str_replace('[Email]', $scheduling_email, $html_treated); /*BM:Updated Line*/
 						$plain_treated = str_replace('[Email]', $scheduling_email, $plain_treated); /*BM:Updated Line*/
 						$title_treated = str_replace('[Email]', $scheduling_email, $title_treated); /*BM:Updated Line*/
+
+						//set reconsent links
+				    	$html_treated = str_replace('[reconsent]', APP_PATH.'/r?e='.$scheduling_short_email.'&a='.short($app).'&w='.$scheduling_short_subscriber_id.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id), $html_treated);  /*BM:Updated Line*/
+				    	$plain_treated = str_replace('[reconsent]', APP_PATH.'/r?e='.$scheduling_short_email.'&a='.short($app).'&w='.$scheduling_short_subscriber_id.'/'.$scheduling_short_subscriber_list.'/'.short($campaign_id), $plain_treated); /*BM:Updated Line*/
 				    	
 				    	//If opens tracking is enabled, add 1 x 1 px tracking image
 				    	if($opens_tracking)
