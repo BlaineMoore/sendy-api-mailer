@@ -1,8 +1,8 @@
 <?php
 /*
  * File: scheduling/scheduled.php
- * Description: This file determines which is the best method for sending messages. Compatible through v3.0.5
- * Version: 0.2
+ * Description: This file determines which is the best method for sending messages. Compatible through v3.0.7
+ * Version: 0.3
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -116,7 +116,7 @@ include_once('normal-sendy.php'); // Default: use the normal Sendy scheduled.php
 			$converted_date = array($currentdaynumber, $currentday, $currentmonthnumber, $currentmonth, $currentyear);
 			
 			//get smtp settings
-			$q3 = 'SELECT smtp_host, smtp_port, smtp_ssl, smtp_username, smtp_password, notify_campaign_sent FROM apps WHERE id = '.$app;
+			$q3 = 'SELECT smtp_host, smtp_port, smtp_ssl, smtp_username, smtp_password, notify_campaign_sent, gdpr_only FROM apps WHERE id = '.$app;
 			$r3 = mysqli_query($mysqli, $q3);
 			if ($r3 && mysqli_num_rows($r3) > 0)
 			{
@@ -128,6 +128,7 @@ include_once('normal-sendy.php'); // Default: use the normal Sendy scheduled.php
 					$smtp_username = $row['smtp_username'];
 					$smtp_password = $row['smtp_password'];
 					$notify_campaign_sent = $row['notify_campaign_sent'];
+					$gdpr_line = $row['gdpr_only'] ? 'AND gdpr = 1 ' : '';
 			    }  
 			}
 			
