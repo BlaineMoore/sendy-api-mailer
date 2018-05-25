@@ -1,8 +1,8 @@
 <?php
 /*
  * File: scheduling/scheduled.php
- * Description: This file determines which is the best method for sending messages. Compatible through v3.0.7
- * Version: 0.3
+ * Description: This file determines which is the best method for sending messages. Compatible through v3.0.9.1
+ * Version: 1.3.0.9.1
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -197,5 +197,6 @@ include_once('normal-sendy.php'); // Default: use the normal Sendy scheduled.php
 	}
 	
 $scheduling_end = microtime_float();
-echo "<br />\nEnded at: $scheduling_end\n<br />\n\n<br />\n Total Run Time: " . ($scheduling_end-$scheduling_start) . " seconds\n";
+$totalTime = $scheduling_end-$scheduling_start;
+echo "<br />\nEnded at: $scheduling_end\n<br />\n\n<br />\n Total Run Time: " . $totalTime . " seconds\n";
 ?>
