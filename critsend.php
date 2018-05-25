@@ -1,8 +1,9 @@
 <?php
 /*
  * File: scheduling/critsend.php
- * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.7
- * Version: 0.4.4
+ * Description: This file provides a method for sending using the Critsend API.  Compatible through v3.0.9.1
+ * Version: 1.3.0.9.1
+ * IMPORTANT NOTE: This file may not be maintained going forward. Please note any changes after version 3.0.9.1.
  * Contributors:
  *      Blaine Moore    http://blainemoore.com
  *
@@ -148,10 +149,12 @@ function scheduling_critsend($campaign_id) {
 					if($links_tracking)
 					{
 						//Insert web version link
-						if(strpos($html, '</webversion>')==true)
-						{
+						if(strpos($html, '</webversion>')==true || strpos($html, '[webversion]')==true)
 							mysqli_query($mysqli, 'INSERT INTO links (campaign_id, link) VALUES ('.$campaign_id.', "'.APP_PATH.'/w/'.short($campaign_id).'")');
-						}
+
+						//Insert reconsent link
+						if(strpos($html, '[reconsent]')==true)
+							mysqli_query($mysqli, 'INSERT INTO links (campaign_id, link) VALUES ('.$campaign_id.', "'.APP_PATH.'/r?c='.short($campaign_id).'")');
 						
 						//Insert into links
 						$links = array();
@@ -281,7 +284,7 @@ BM: Removed */
 							    	//replace new links on Plain Text code
 							    	$plain_treated = str_replace($link, APP_PATH.'/l/'.$scheduling_short_subscriber_id.'/'.short($linkID).'/'.short($campaign_id), $plain_treated); /* BM: Updated line */
 							    }
-						    }   
+						    }  
 						}
 						
 						//tags for subject
